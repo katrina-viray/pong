@@ -4,7 +4,7 @@ A pong recreation with a server.
 
 ### Dependencies
 The system requirements for running on a Window are:
-* Compiler: [MSVC or MinGW](https://code.visualstudio.com/docs/languages/cpp)
+* Compiler: [MinGW](https://code.visualstudio.com/docs/languages/cpp)
   * If another compiler is used, update the Makefile compiler to your compiler
 * [SDL2](https://www.libsdl.org/)
 * [SDL2_image](https://www.libsdl.org/projects/SDL_image/)
@@ -17,9 +17,7 @@ The system requirements for running on a Window are:
     git clone https://github.com/katrina-viray/pong.git
     ```
 2. Download SDL2 libraries and link them to your project
-   ```
-   https://www.youtube.com/watch?v=jUZZC9UXyFs&t=5s
-   ```
+  [Tutorial](https://www.youtube.com/watch?v=H08t6gD1Y1E)
 
 ### Executing program
 
