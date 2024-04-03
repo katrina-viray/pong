@@ -18,6 +18,7 @@ The system requirements for running on a Window are:
     ```
 2. Download SDL2 libraries and link them to your project
   [Tutorial](https://www.youtube.com/watch?v=H08t6gD1Y1E)
+  [Tutorial 2](https://www.youtube.com/watch?v=9Ca-RVPwnBE)
 
 ### Executing program
 
