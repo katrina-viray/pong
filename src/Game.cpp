@@ -1,7 +1,8 @@
 #include "Game.hpp"
+#include "TextureManager.hpp"
+#include "GameObject.hpp"
 
-SDL_Texture* circleTex;
-SDL_Rect srcR, destR;
+GameObject * player;
 
 Game::Game(){
 
@@ -35,10 +36,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
     else{
         isRunning = false;
     }
-
-    SDL_Surface* tmpSurface = IMG_Load("assets/circle.png");
-    circleTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-    SDL_FreeSurface(tmpSurface);
+  player = new GameObject("assets/circle.png", renderer, 0, 0);
 }
 
 void Game::handleEvents(){
@@ -55,11 +53,7 @@ void Game::handleEvents(){
 }
 
 void Game::update(){
-    count++;
-    destR.h = 64;
-    destR.w = 64;
-    //destR.x = count;
-    std::cout << count << std::endl;
+    player->Update();
 }
 
 void Game::render(){
@@ -70,8 +64,7 @@ void Game::render(){
 
     // last 2 args: for srcRect, NULL uses entire img
     // for dstRect, NULL draws to the whole render frame.
-    SDL_RenderCopy(renderer, circleTex, NULL, &destR);
-
+    player->Render();
     SDL_RenderPresent(renderer);
 }
 
