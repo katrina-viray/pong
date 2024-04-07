@@ -1,8 +1,11 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
 #include "GameObject.hpp"
+#include "Map.hpp"
 
 GameObject * player;
+SDL_Renderer* Game::renderer = nullptr;
+Map* map;
 
 Game::Game(){
 
@@ -36,7 +39,8 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
     else{
         isRunning = false;
     }
-  player = new GameObject("assets/circle.png", renderer, 0, 0);
+  player = new GameObject("assets/circle.png", 0, 0);
+  map = new Map();
 }
 
 void Game::handleEvents(){
@@ -60,10 +64,8 @@ void Game::render(){
     // clear renderer's buffer
     SDL_RenderClear(renderer);
 
-    // add stuff to render
+    map->DrawMap();
 
-    // last 2 args: for srcRect, NULL uses entire img
-    // for dstRect, NULL draws to the whole render frame.
     player->Render();
     SDL_RenderPresent(renderer);
 }
