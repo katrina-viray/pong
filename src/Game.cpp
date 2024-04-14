@@ -2,6 +2,7 @@
 #include "TextureManager.hpp"
 #include "Map.hpp"
 #include "ECS/Components.hpp"
+#include "Vector2D.hpp"
 
 SDL_Renderer* Game::renderer = nullptr;
 Map* map;
@@ -44,7 +45,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
   map = new Map();
 
   // ECS implementation
-  player.addComponent<PositionComponent>(100, 500);
+  player.addComponent<TransformComponent>(100, 500);
   player.addComponent<SpriteComponent>("assets/circle.png");
 
 }
@@ -65,6 +66,11 @@ void Game::handleEvents(){
 void Game::update(){
     manager.refresh();
     manager.update();
+
+    player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
+    if(player.getComponent<TransformComponent>().position.x > 100){
+      player.getComponent<SpriteComponent>().setTex("assets/star.png");
+    }
 
 }
 
