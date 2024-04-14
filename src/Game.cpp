@@ -5,6 +5,8 @@
 #include "Vector2D.hpp"
 
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
+
 Map* map;
 
 Manager manager;
@@ -47,11 +49,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
   // ECS implementation
   player.addComponent<TransformComponent>(100, 500);
   player.addComponent<SpriteComponent>("assets/circle.png");
-
+  player.addComponent<KeyboardController>();
 }
 
 void Game::handleEvents(){
-    SDL_Event event;
     SDL_PollEvent(&event);
 
     switch(event.type){
@@ -67,10 +68,7 @@ void Game::update(){
     manager.refresh();
     manager.update();
 
-    player.getComponent<TransformComponent>().position.Add(Vector2D(5, 0));
-    if(player.getComponent<TransformComponent>().position.x > 100){
-      player.getComponent<SpriteComponent>().setTex("assets/star.png");
-    }
+    
 
 }
 
