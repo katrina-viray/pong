@@ -1,16 +1,13 @@
 #include "Game.hpp"
 #include "TextureManager.hpp"
-#include "GameObject.hpp"
 #include "Map.hpp"
-#include "ECS.hpp"
-#include "Components.hpp"
+#include "ECS/Components.hpp"
 
-GameObject * player;
 SDL_Renderer* Game::renderer = nullptr;
 Map* map;
 
 Manager manager;
-auto& newPlayer(manager.addEntity());
+auto& player(manager.addEntity());
 
 Game::Game(){
 
@@ -44,11 +41,12 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
     else{
         isRunning = false;
     }
-  player = new GameObject("assets/circle.png", 0, 0);
   map = new Map();
 
-  newPlayer.addComponent<PositionComponent>();
-  newPlayer.getComponent<PositionComponent>().setPos(500, 500);
+  // ECS implementation
+  player.addComponent<PositionComponent>(100, 500);
+  player.addComponent<SpriteComponent>("assets/circle.png");
+
 }
 
 void Game::handleEvents(){
@@ -65,10 +63,9 @@ void Game::handleEvents(){
 }
 
 void Game::update(){
-    player->Update();
+    manager.refresh();
     manager.update();
-    std::cout << newPlayer.getComponent<PositionComponent>().x() << "," << 
-    newPlayer.getComponent<PositionComponent>().y() << std::endl;
+
 }
 
 void Game::render(){
@@ -76,8 +73,8 @@ void Game::render(){
     SDL_RenderClear(renderer);
 
     map->DrawMap();
+    manager.draw();
 
-    player->Render();
     SDL_RenderPresent(renderer);
 }
 

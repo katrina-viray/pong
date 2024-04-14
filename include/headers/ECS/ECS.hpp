@@ -31,6 +31,7 @@ inline ComponentID getComponentTypeID(){
 
 // template function for type-specific version of getComponentID()
 template <typename T> inline ComponentID getComponentTypeID() noexcept{
+  static_assert(std::is_base_of<Component, T>::value, "");
   static ComponentID typeID = getComponentTypeID();
   return typeID;
 }
@@ -69,10 +70,11 @@ private:
 public:
   void update(){
     for (auto& c : components) c->update();
-    for(auto& c : components) c->draw();
   }
 
-  void draw() {}
+  void draw() {
+    for(auto& c : components) c->draw();
+  }
   bool isActive() const { return active; }
   void destroy() {active = false;}
 
