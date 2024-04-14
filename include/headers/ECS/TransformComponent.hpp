@@ -2,18 +2,18 @@
 
 #include "Components.hpp"
 
-class PositionComponent : public Component{
+class TransformComponent : public Component{
 private:
   int xPos;
   int yPos;
 
 public:
-  PositionComponent(){
+  TransformComponent(){
     xPos = 0;
     yPos = 0;
   }
 
-  PositionComponent(int x, int y){
+  TransformComponent(int x, int y){
     xPos = x;
     yPos = y;
   }
