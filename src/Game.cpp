@@ -71,15 +71,15 @@ void Game::handleEvents(){
     }
 }
 
-void Game::update(){
-    manager.refresh();
-    manager.update();
+void Game::update() {
+	Vector2D playerPos = player.getComponent<TransformComponent>().position;
+	manager.refresh();
+	manager.update();
 
-    if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
-      wall.getComponent<ColliderComponent>().collider)){
-        player.getComponent<TransformComponent>().scale = 1;
-        std::cout << "Wall Hit!" << std::endl;
-      }
+	if (Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider)) {
+		player.getComponent<TransformComponent>().position = playerPos;
+		std::cout << "Collision!" << std::endl;
+	}
 }
 
 void Game::render(){
