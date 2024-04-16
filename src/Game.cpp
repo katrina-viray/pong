@@ -5,14 +5,19 @@
 #include "Vector2D.hpp"
 #include "Collision.hpp"
 
+Map* map;
+Manager manager;
+
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-Map* map;
+std::vector<ColliderComponent*> Game::colliders;
 
-Manager manager;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
+auto& tile1(manager.addEntity());
+auto& tile2(manager.addEntity());
+auto& tile3(manager.addEntity());
 
 Game::Game(){
 
@@ -49,6 +54,11 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
   map = new Map();
 
   // ECS implementation
+  tile1.addComponent<TileComponent>(200, 200, 32, 32, 1);
+  tile2.addComponent<TileComponent>(250, 250, 32, 32, 1);
+  tile3.addComponent<TileComponent>(150, 150, 32, 32, 1);
+  tile1.addComponent<ColliderComponent>("wall");
+
   player.addComponent<TransformComponent>(2);
   player.addComponent<SpriteComponent>("assets/circle.png");
   player.addComponent<KeyboardController>();
@@ -76,17 +86,17 @@ void Game::update() {
 	manager.refresh();
 	manager.update();
 
-	if (Collision::AABB(player.getComponent<ColliderComponent>().collider, wall.getComponent<ColliderComponent>().collider)) {
-		player.getComponent<TransformComponent>().position = playerPos;
-		std::cout << "Collision!" << std::endl;
-	}
+  for (auto cc : colliders){
+    	if (Collision::AABB(player.getComponent<ColliderComponent>(), *cc)) {
+		    //player.getComponent<TransformComponent>().position = playerPos;
+	    }
+  }
 }
 
 void Game::render(){
     // clear renderer's buffer
     SDL_RenderClear(renderer);
 
-    map->DrawMap();
     manager.draw();
 
     SDL_RenderPresent(renderer);

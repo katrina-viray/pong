@@ -2,6 +2,7 @@
 
 #include "Components.hpp"
 #include <SDL.h>
+#include "../TextureManager.hpp"
 
 class SpriteComponent : public Component{
 private:
