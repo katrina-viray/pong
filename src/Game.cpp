@@ -11,8 +11,6 @@ Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-AssetManager* Game::assets = new AssetManager(&manager);
-
 std::vector<ColliderComponent*> Game::colliders;
 
 auto& player1(manager.addEntity());
@@ -52,22 +50,22 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
         isRunning = false;
     }
 
-  assets->AddTexture("player1", "assets/player1.png");
-  assets->AddTexture("ball", "assets/ball.png");
-
   map = new Map();
 
-  player1.addComponent<TransformComponent>(2);
-  player1.addComponent<SpriteComponent>("player1");
-  player1.addComponent<KeyboardController>();
+  ball.addComponent<TransformComponent>(390, 295, 25, 25, 2);
+  ball.addComponent<SpriteComponent>("assets/ball.png");
+
+  player1.addComponent<TransformComponent>(775, 235, 150, 25, 2);
+  player1.addComponent<SpriteComponent>("assets/player1.png");
+  player1.addComponent<KeyboardController1>();
   player1.addComponent<ColliderComponent>("player1");
 
-  player2.addComponent<TransformComponent>(2);
+  player2.addComponent<TransformComponent>(0, 235, 150, 25, 2);
   player2.addComponent<SpriteComponent>("assets/player2.png");
-  player2.addComponent<KeyboardController>();
+  player2.addComponent<KeyboardController2>();
   player2.addComponent<ColliderComponent>("player2");
 
-  assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0),200, 2, "projectile");}
+  }
 
 void Game::handleEvents(){
     SDL_PollEvent(&event);
@@ -82,23 +80,18 @@ void Game::handleEvents(){
 }
 
 void Game::update() {
-	Vector2D playerPos = player1.getComponent<TransformComponent>().position;
+  Vector2D playerPos1 = player1.getComponent<TransformComponent>().position;
+	Vector2D playerPos2 = player2.getComponent<TransformComponent>().position;
 	manager.refresh();
 	manager.update();
 
   for (auto cc : colliders){
-    	if (Collision::AABB(player1.getComponent<ColliderComponent>(), *cc)) {
-		    player1.getComponent<TransformComponent>().position = playerPos;
+    // Collision::AABB(player1.getComponent<ColliderComponent>(), ball.getComponent<ColliderComponent>()
+    	if (Collision::AABB(player2.getComponent<ColliderComponent>(), *cc)) {
+		    // bounce ball back here
 	    }
   }
 }
-/*
-  for (auto& b : ball){
-    if(Collision::AABB(player1.getComponent<ColliderComponent>(), p->getComponent<ColliderComponent>())){
-      std::cout << "player hit ball" << std::endl;
-    }
-  }
-  */
 
 void Game::render(){
     // clear renderer's buffer
