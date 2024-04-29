@@ -17,8 +17,7 @@ std::vector<ColliderComponent*> Game::colliders;
 
 auto& player1(manager.addEntity());
 auto& player2(manager.addEntity());
-
-//auto& wall(manager.addEntity());
+auto& ball(manager.addEntity());
 
 Game::Game(){
 
@@ -54,6 +53,8 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
     }
 
   assets->AddTexture("player1", "assets/player1.png");
+  assets->AddTexture("ball", "assets/ball.png");
+
   map = new Map();
 
   player1.addComponent<TransformComponent>(2);
@@ -66,12 +67,7 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
   player2.addComponent<KeyboardController>();
   player2.addComponent<ColliderComponent>("player2");
 
-  /*
-  wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-  wall.addComponent<SpriteComponent>("assets/star.png");
-  wall.addComponent<ColliderComponent>("wall");
-  */
-}
+  assets->CreateProjectile(Vector2D(600, 600), Vector2D(2,0),200, 2, "projectile");}
 
 void Game::handleEvents(){
     SDL_PollEvent(&event);
@@ -92,10 +88,17 @@ void Game::update() {
 
   for (auto cc : colliders){
     	if (Collision::AABB(player1.getComponent<ColliderComponent>(), *cc)) {
-		    //player.getComponent<TransformComponent>().position = playerPos;
+		    player1.getComponent<TransformComponent>().position = playerPos;
 	    }
   }
 }
+/*
+  for (auto& b : ball){
+    if(Collision::AABB(player1.getComponent<ColliderComponent>(), p->getComponent<ColliderComponent>())){
+      std::cout << "player hit ball" << std::endl;
+    }
+  }
+  */
 
 void Game::render(){
     // clear renderer's buffer
