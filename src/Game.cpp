@@ -53,7 +53,10 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
   map = new Map();
 
   ball.addComponent<TransformComponent>(390, 295, 25, 25, 2);
+  Vector2D ballPos = ball.getComponent<TransformComponent>().position;
   ball.addComponent<SpriteComponent>("assets/ball.png");
+  ball.addComponent<ProjectileComponent>(1, ballPos);
+
 
   player1.addComponent<TransformComponent>(775, 235, 150, 25, 2);
   player1.addComponent<SpriteComponent>("assets/player1.png");

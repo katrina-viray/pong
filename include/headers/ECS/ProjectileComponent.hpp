@@ -7,7 +7,7 @@
 class ProjectileComponent : public Component
 {
 public:
-	ProjectileComponent(int rng, int sp, Vector2D vel) : range(rng), speed(sp), velocity(vel)
+	ProjectileComponent(int sp, Vector2D vel) : speed(sp), velocity(vel)
 	{}
 	~ProjectileComponent()
 	{}
@@ -20,17 +20,10 @@ public:
 
 	void update() override
 	{
-		distance += speed;
-
-		if (distance > range)
-		{
-			std::cout << "Out of Range" << std::endl;
-			entity->destroy();
-		}
-		else if (transform->position.x > 128 ||
-				transform->position.x < -128 ||
-				transform->position.y > 128 ||
-				transform->position.y < -128)
+    if (transform->position.x > 800 ||
+				transform->position.x < 0 ||
+				transform->position.y > 640 ||
+				transform->position.y < 0)
 		{
 			std::cout << "Out of bounds!" << std::endl;
 			entity->destroy();
@@ -41,9 +34,7 @@ private:
 
 	TransformComponent* transform;
 
-	int range = 0;
 	int speed = 0;
-	int distance = 0;
 	Vector2D velocity;
 
 
