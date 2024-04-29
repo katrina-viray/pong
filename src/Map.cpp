@@ -1,80 +1,29 @@
 #include "Map.hpp"
-#include "TextureManager.hpp"
-
-int lvl1[20][25] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
+#include "Game.hpp"
+#include <fstream>
 
 Map::Map(){
-  sky = TextureManager::LoadTexture("assets/sky.png");
-  star = TextureManager::LoadTexture("assets/star.png");
 
-
-  LoadMap(lvl1);
-  src.x = src.y = 0;
-  src.w = dest.w = 32;
-  src.h = dest.h = 32;
-
-  dest.x = dest.y = 0;
 }
 
 Map::~Map(){
-  SDL_DestroyTexture(sky);
-  SDL_DestroyTexture(star);
 
 }
 
-void Map::LoadMap(int arr[20][25]){
-  for(int row = 0; row < 20; row++)
+ void Map::LoadMap(std::string path, int sizeX, int sizeY){
+  char tile;
+  std::fstream mapFile;
+  mapFile.open(path);
+
+  // parse the file
+  for(int y = 0; y < sizeY; y++)
   {
-    for (int col = 0; col < 25; col++)
-    {
-        map[row][col] = arr[row][col];
+    for(int x = 0; x < sizeX; x++){
+      mapFile.get(tile);
+      Game::AddTile(atoi(&tile), x * 32, y * 32);
+      mapFile.ignore(); // ignores commas in file
     }
   }
 
-}
-
-void Map::DrawMap(){
-  int type = 0;
- for(int row = 0; row < 20; row++)
-  {
-    for (int col = 0; col < 25; col++)
-    {
-      type = map[row][col];
-      dest.x = col * 32;
-      dest.y = row * 32;
-
-      switch(type)
-      {
-        case 0:
-          TextureManager::Draw(sky, src, dest);
-          break;
-        case 1:
-          TextureManager::Draw(star, src, dest);
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  mapFile.close();
 }

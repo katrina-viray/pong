@@ -10,8 +10,8 @@ public:
 
   int speed = 5;
 
-  int height = 32;
-  int width = 32;
+  int height = 150;
+  int width = 25;
   int scale = 1;
 
   TransformComponent(){

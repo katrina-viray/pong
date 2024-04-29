@@ -3,6 +3,7 @@
 #include "Components.hpp"
 #include <SDL.h>
 #include "../TextureManager.hpp"
+#include "../AssetManager.hpp"
 
 class SpriteComponent : public Component{
 private:
@@ -12,20 +13,20 @@ private:
 
 public:
   SpriteComponent() = default;
-  SpriteComponent(const char* path){
-    setTex(path);
+  SpriteComponent(std::string id){
+    setTex(id);
   }
 
   ~SpriteComponent(){
-    SDL_DestroyTexture(texture);
+  
   }
 
   
 // created so the texture can be updated later; for instance, you may
 // break an item in the game. You must update the item's sprite with
 // a new broken item texture, thus the need for a setTex function
-void setTex(const char* path){
-  texture = TextureManager::LoadTexture(path);
+void setTex(std::string id){
+  texture = Game::assets->GetTexture(id);
 }
 
   void init() override{

@@ -11,13 +11,14 @@ Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+AssetManager* Game::assets = new AssetManager(&manager);
+
 std::vector<ColliderComponent*> Game::colliders;
 
-auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
-auto& tile1(manager.addEntity());
-auto& tile2(manager.addEntity());
-auto& tile3(manager.addEntity());
+auto& player1(manager.addEntity());
+auto& player2(manager.addEntity());
+
+//auto& wall(manager.addEntity());
 
 Game::Game(){
 
@@ -51,22 +52,25 @@ void Game::init(const char* title, int xPos, int yPos, int width, int height, bo
     else{
         isRunning = false;
     }
+
+  assets->AddTexture("player1", "assets/player1.png");
   map = new Map();
 
-  // ECS implementation
-  tile1.addComponent<TileComponent>(200, 200, 32, 32, 1);
-  tile2.addComponent<TileComponent>(250, 250, 32, 32, 1);
-  tile3.addComponent<TileComponent>(150, 150, 32, 32, 1);
-  tile1.addComponent<ColliderComponent>("wall");
+  player1.addComponent<TransformComponent>(2);
+  player1.addComponent<SpriteComponent>("player1");
+  player1.addComponent<KeyboardController>();
+  player1.addComponent<ColliderComponent>("player1");
 
-  player.addComponent<TransformComponent>(2);
-  player.addComponent<SpriteComponent>("assets/circle.png");
-  player.addComponent<KeyboardController>();
-  player.addComponent<ColliderComponent>("player");
+  player2.addComponent<TransformComponent>(2);
+  player2.addComponent<SpriteComponent>("assets/player2.png");
+  player2.addComponent<KeyboardController>();
+  player2.addComponent<ColliderComponent>("player2");
 
+  /*
   wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
   wall.addComponent<SpriteComponent>("assets/star.png");
   wall.addComponent<ColliderComponent>("wall");
+  */
 }
 
 void Game::handleEvents(){
@@ -82,12 +86,12 @@ void Game::handleEvents(){
 }
 
 void Game::update() {
-	Vector2D playerPos = player.getComponent<TransformComponent>().position;
+	Vector2D playerPos = player1.getComponent<TransformComponent>().position;
 	manager.refresh();
 	manager.update();
 
   for (auto cc : colliders){
-    	if (Collision::AABB(player.getComponent<ColliderComponent>(), *cc)) {
+    	if (Collision::AABB(player1.getComponent<ColliderComponent>(), *cc)) {
 		    //player.getComponent<TransformComponent>().position = playerPos;
 	    }
   }
@@ -107,4 +111,9 @@ void Game::clean(){
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
     std::cout << "Game cleaned!" << std::endl;
+}
+
+void Game::AddTile(int id, int x, int y){
+  auto& tile(manager.addEntity());
+  tile.addComponent<TileComponent>(x, y, 32, 32, id);
 }

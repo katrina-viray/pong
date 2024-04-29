@@ -1,19 +1,16 @@
 #pragma once
+#include <string>
 
-#include "Game.hpp"
 
 class Map{
 private:
-  SDL_Rect src, dest;
-  SDL_Texture* sky;
-  SDL_Texture* star;
-  int map[20][25];
+  std::string texID;
+
 
 public:
   Map();
   ~Map();
 
-  void LoadMap(int arr[20][25]);
-  void DrawMap();
+  static void LoadMap(std::string path, int sizeX, int sizeY);
 
 };
