@@ -24,8 +24,14 @@ The system requirements for running on Windows are on Visual Studio Code are:
 
 1. Compile the program into an executable
 ```
-make or use "	g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image" in the terminal
+g++ -Iinclude -Iinclude/sdl -Iinclude/headers -Llib -o main src/*.cpp -lmingw32 -lSDL2main -lSDL2 -lSDL2_image"
 ```
+or
+```
+make
+```
+in the terminal.
+
 2. Run the executable
 ```
 ./main
